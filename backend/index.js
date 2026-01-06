@@ -1,8 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require('mongoose');
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+// const axios = require("axios");
+const authRoute = require("./Routes/AuthRoute");
 
 const {HoldingsModel} = require("./model/HoldingsModel");  
 const {PositionsModel} = require("./model/PositionsModel"); 
@@ -12,8 +15,18 @@ const uri = process.env.MONGO_URL;
 
 const app = express(); 
 
-app.use(cors());
-app.use(bodyParser.json()); 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],  
+    credentials: true,
+}));
+
+// app.use(bodyParser.json()); 
+
 
 // app.get('/addHoldings', async(req,res)=>{
 //     let tempHoldings = [
@@ -183,6 +196,7 @@ app.use(bodyParser.json());
 // })
 //    res.send("DOne!");
 // });
+app.use("/api/auth", authRoute); 
 
 app.get('/allHoldings', async(req, res)=> {
     let allHoldings = await HoldingsModel.find({});
