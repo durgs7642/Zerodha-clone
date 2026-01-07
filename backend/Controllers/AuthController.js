@@ -17,6 +17,7 @@ module.exports.Signup = async (req, res) => {
             sameSite: "lax", // or 'none' if using https and cross-site
             secure: false,  // set to true if using HTTPS
             maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
+             path: "/",
         });
         res.status(201).json({ message: "User signed up successfully", success: true, user });
         // next();
