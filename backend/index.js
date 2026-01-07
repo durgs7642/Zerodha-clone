@@ -9,6 +9,7 @@ const authRoute = require("./Routes/AuthRoute");
 
 const {HoldingsModel} = require("./model/HoldingsModel");  
 const {PositionsModel} = require("./model/PositionsModel"); 
+const { userVerification } = require("./Middlewares/AuthMiddlewares");
 
 const PORT = process.env.PORT || 3002;
 const uri = process.env.MONGO_URL;
@@ -19,8 +20,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+const allowedOrigins = ["http://localhost:3000","http://localhost:3001"];
 app.use(cors({
-    origin: "http://localhost:3000",
+     origin: function (origin, callback) {
+     if (!origin) return callback(null, true);
+     if (allowedOrigins.includes(origin)) {
+       return callback(null, true);
+     } else {
+       return callback(new Error("CORS blocked this origin"));
+     }
+   },
     methods: ["GET", "POST", "PUT", "DELETE"],  
     credentials: true,
 }));
@@ -198,19 +207,20 @@ app.use(cors({
 // });
 app.use("/api/auth", authRoute); 
 
-app.get('/allHoldings', async(req, res)=> {
+app.get('/allHoldings',userVerification, async(req, res)=> {
     let allHoldings = await HoldingsModel.find({});
     res.json(allHoldings);
 });
 
-app.get('/allPositions', async(req, res)=> {
+app.get('/allPositions', userVerification, async(req, res)=> {
     let allPositions = await PositionsModel.find({});
     res.json(allPositions);
 });
 
+mongoose.connect(uri);
+    console.log("DB Connected Successfully");
 
 app.listen(PORT, ()=>{
     console.log("App is started on port 3002");
-    mongoose.connect(uri);
-    console.log("DB Connected Successfully");
+    
 } )
