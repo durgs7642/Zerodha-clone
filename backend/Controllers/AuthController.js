@@ -16,11 +16,11 @@ module.exports.Signup = async (req, res) => {
             httpOnly: true, // hide cookie from JS (good practice)
             sameSite: "lax", // or 'none' if using https and cross-site
             secure: false,  // set to true if using HTTPS
-            maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
+            maxAge: 3 * 24 * 60 * 60 * 1000, 
              path: "/",
         });
         res.status(201).json({ message: "User signed up successfully", success: true, user });
-        // next();
+       
     }
     catch (error) {
         console.error(error);
@@ -46,10 +46,11 @@ module.exports.Login = async (req, res)=> {
             httpOnly: true,  // hide cookie from JS (good practice)
             sameSite: "lax", // or 'none' if using https and cross-site
             secure: false,  // set to true if using HTTPS
-            maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
+            maxAge: 3 * 24 * 60 * 60 * 1000, 
+            path: "/",
         });
         res.status(201).json({message: "User logged in successfully", success: true});
-        // next();
+        
     }catch(error){
         console.error(error);
     }
@@ -60,6 +61,7 @@ module.exports.Logout = (req, res) => {
     httpOnly: true,
     sameSite: "lax",
     secure: false,
+    path: "/",
   });
 
   res.status(200).json({ success: true, message: "Logged out successfully" });
