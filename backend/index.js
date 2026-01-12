@@ -20,16 +20,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const allowedOrigins = ["http://localhost:3000","http://localhost:3001"];
+// const allowedOrigins = ["http://localhost:3000","http://localhost:3001"];
 app.use(cors({
-     origin: function (origin, callback) {
-     if (!origin) return callback(null, true);
-     if (allowedOrigins.includes(origin)) {
-       return callback(null, true);
-     } else {
-       return callback(new Error("CORS blocked this origin"));
-     }
-   },
+        origin: ["http://localhost:3000","http://localhost:3001"]   ,
+//      origin: function (origin, callback) {
+//      if (!origin) return callback(null, true);
+//      if (allowedOrigins.includes(origin)) {
+//        return callback(null, true);
+//      } else {
+//        return callback(new Error("CORS blocked this origin"));
+//      }
+//    },
     methods: ["GET", "POST", "PUT", "DELETE"],  
     credentials: true,
 }));
